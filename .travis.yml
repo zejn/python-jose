@@ -4,11 +4,12 @@ env:
   - TOXENV=py27
   - TOXENV=py33
   - TOXENV=py34
+  - TOXENV=py35
   - TOXENV=pypy
-install: 
+install:
   - pip install -r requirements-dev.txt
   - pip install -U tox codecov
-script: 
+script:
   - tox
 after_success:
 - codecov
