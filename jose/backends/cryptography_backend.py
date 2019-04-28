@@ -300,7 +300,11 @@ class CryptographyRSAKey(Key):
 
     def verify(self, msg, sig):
         try:
-            self.prepared_key.verify(
+            key = self
+            if not self.is_public():
+                key = key.public_key()
+
+            key.prepared_key.verify(
                 sig,
                 msg,
                 padding.PKCS1v15(),

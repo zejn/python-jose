@@ -291,6 +291,40 @@ class TestRSA(object):
         with pytest.raises(JWSError):
             jws.verify(token, rsa_public_key, ALGORITHMS.HS256)
 
+    def test_private_verify(self, payload):
+        rsa_private_key = """-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAOHtxysup2aV+bXr
+A7T6Nh7787sEyh1/on6pXlBEcBLuNBMftZ02J+hMTIkGrMkeydXAoUEM6GbZE4Ac
+IUZTgMz/k09dtSA9tXrxT+QS9ZfglgNASJUR/X6Ti2yE8Ne6FfN8EjtsG67QBN5D
+NXqRRGE4vWQ//Itr0cY71wclCVetAgMBAAECgYEAmHurGPH7+bjvOGDNt6/IJ1FV
+RrwMzav/OA2HohUOrzgl3WJhaSHL/XTBkxn2NCebgbDpJMZZdFC+YJCbxKNHIdAI
+AnA2DfwlJO9pq01Pv1gzKlO3G6NI515UwtWvLcLWK8TDvkZKh5/pRPjLF2cXFSvM
+b6dZHqIA1xyQGmiJuQECQQD1qsQn8u/zVLhE7oaYcvdFqEFtXmWWTsYctqM89J1M
+ZNSEtg7R3k9q0sjwUvU4Y5xWht6roEKGfLHPi11fN9YJAkEA6256rdx/i7Dm2shG
++2U+0S3qh3tMLRU3YWqEmiiQoT+w2D+Wtp4nirHM5YVQsKC1rh1cNea8xRwTju75
+UI89hQJAVryzQzOYGr7HzLa22O6GdZahex8AGSC4+/xUCDqJqyZSjoTFGL44JgxE
+G+3+XKl20moOBmSv+FHgadnX3r2VGQJBAI0i1fiUTwH3Mu3FUogy0c2ksQw3JhuA
+tIp5yLSBzPJdtC5vMHKZrSrAHA0cNpssPL38a+MER/YCNtdg+6UHueECQEWD+0f0
+9NhDyumVva8lGEqbuOzE7tdVYDUNX9Tzb7AEl1HvD8PtvrX73VyicBDtV7NAN0od
+K6VO8PP1jeHq40g=
+-----END PRIVATE KEY-----
+"""
+
+        rsa_public_key = """-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDh7ccrLqdmlfm16wO0+jYe+/O7
+BModf6J+qV5QRHAS7jQTH7WdNifoTEyJBqzJHsnVwKFBDOhm2ROAHCFGU4DM/5NP
+XbUgPbV68U/kEvWX4JYDQEiVEf1+k4tshPDXuhXzfBI7bBuu0ATeQzV6kURhOL1k
+P/yLa9HGO9cHJQlXrQIDAQAB
+-----END PUBLIC KEY-----
+"""
+        token = jws.sign(payload, rsa_private_key, algorithm='RS256')
+
+        # verify with public
+        dec = jws.verify(token, rsa_public_key, algorithms='RS256')
+
+        # verify with private works
+        dec = jws.verify(token, rsa_private_key, algorithms='RS256')
+
 
 ec_private_key = """-----BEGIN EC PRIVATE KEY-----
 MIHcAgEBBEIBzs13YUnYbLfYXTz4SG4DE4rPmsL3wBTdy34JcO+BDpI+NDZ0pqam
