@@ -147,6 +147,9 @@ class RSAKey(Key):
             raise JWKError(e)
 
     def verify(self, msg, sig):
+        if not self.is_public():
+            import warnings
+            warnings.warn("Deprecated: Support for verifying signatures with private keys is implementation specific and will be removed in a future version", category=DeprecationWarning)
         try:
             return PKCS1_v1_5.new(self.prepared_key).verify(self.hash_alg.new(msg), sig)
         except Exception:

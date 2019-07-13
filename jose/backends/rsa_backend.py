@@ -200,6 +200,9 @@ class RSAKey(Key):
         return pyrsa.sign(msg, self._prepared_key, self.hash_alg)
 
     def verify(self, msg, sig):
+        if not self.is_public():
+            import warnings
+            warnings.warn("Deprecated: Support for verifying signatures with private keys is implementation specific and will be removed in a future version", category=DeprecationWarning)
         try:
             pyrsa.verify(msg, sig, self._prepared_key)
             return True
